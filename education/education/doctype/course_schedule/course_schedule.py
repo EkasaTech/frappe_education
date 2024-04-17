@@ -19,9 +19,9 @@ class CourseSchedule(Document):
 		self.validate_course()
 		self.validate_date()
 		self.validate_time()
-		if self.ignoreOverlap is None:
+		if self.custom_ignoreoverlap is None:
 			self.validate_overlap()
-		elif not self.ignoreOverlap:
+		elif not self.custom_ignoreoverlap:
 			self.validate_overlap()
 
 	def before_save(self):
