@@ -89,19 +89,20 @@ class CourseSchedule(Document):
 
 		from education.education.utils import validate_overlap_for
 
-		# Validate overlapping course schedules.
-		if self.student_group:
-			validate_overlap_for(self, "Course Schedule", "student_group")
+		if not self.ignoreOverlap:
+			# Validate overlapping course schedules.
+			if self.student_group:
+				validate_overlap_for(self, "Course Schedule", "student_group")
 
-		validate_overlap_for(self, "Course Schedule", "instructor")
-		validate_overlap_for(self, "Course Schedule", "room")
+			validate_overlap_for(self, "Course Schedule", "instructor")
+			validate_overlap_for(self, "Course Schedule", "room")
 
-		# validate overlapping assessment schedules.
-		if self.student_group:
-			validate_overlap_for(self, "Assessment Plan", "student_group")
+			# validate overlapping assessment schedules.
+			if self.student_group:
+				validate_overlap_for(self, "Assessment Plan", "student_group")
 
-		validate_overlap_for(self, "Assessment Plan", "room")
-		validate_overlap_for(self, "Assessment Plan", "supervisor", self.instructor)
+			validate_overlap_for(self, "Assessment Plan", "room")
+			validate_overlap_for(self, "Assessment Plan", "supervisor", self.instructor)
 
 	def set_hex_color(self):
 		colors = {
