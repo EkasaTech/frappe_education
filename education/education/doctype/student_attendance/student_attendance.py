@@ -19,7 +19,10 @@ class StudentAttendance(Document):
 		self.set_date()
 		self.set_student_group()
 		self.validate_student()
-		self.validate_duplication()
+		if self.custom_ignoreoverlap is None:
+			self.validate_duplication()
+		elif not self.custom_ignoreoverlap:
+			self.validate_duplication()
 		self.validate_is_holiday()
 
 	def set_date(self):
