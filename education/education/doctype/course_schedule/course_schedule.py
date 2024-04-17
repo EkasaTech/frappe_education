@@ -19,7 +19,10 @@ class CourseSchedule(Document):
 		self.validate_course()
 		self.validate_date()
 		self.validate_time()
-		self.validate_overlap()
+		if self.ignoreOverlap is None:
+			self.validate_overlap()
+		elif not self.ignoreOverlap:
+			self.validate_overlap()
 
 	def before_save(self):
 		self.set_hex_color()
@@ -89,20 +92,19 @@ class CourseSchedule(Document):
 
 		from education.education.utils import validate_overlap_for
 
-		if not self.ignoreOverlap:
-			# Validate overlapping course schedules.
-			if self.student_group:
-				validate_overlap_for(self, "Course Schedule", "student_group")
+		# Validate overlapping course schedules.
+		if self.student_group:
+			validate_overlap_for(self, "Course Schedule", "student_group")
 
-			validate_overlap_for(self, "Course Schedule", "instructor")
-			validate_overlap_for(self, "Course Schedule", "room")
+		validate_overlap_for(self, "Course Schedule", "instructor")
+		validate_overlap_for(self, "Course Schedule", "room")
 
-			# validate overlapping assessment schedules.
-			if self.student_group:
-				validate_overlap_for(self, "Assessment Plan", "student_group")
+		# validate overlapping assessment schedules.
+		if self.student_group:
+			validate_overlap_for(self, "Assessment Plan", "student_group")
 
-			validate_overlap_for(self, "Assessment Plan", "room")
-			validate_overlap_for(self, "Assessment Plan", "supervisor", self.instructor)
+		validate_overlap_for(self, "Assessment Plan", "room")
+		validate_overlap_for(self, "Assessment Plan", "supervisor", self.instructor)
 
 	def set_hex_color(self):
 		colors = {
